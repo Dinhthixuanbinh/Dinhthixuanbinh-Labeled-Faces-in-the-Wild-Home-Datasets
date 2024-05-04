@@ -5,7 +5,7 @@ args = {
     "epochs" : 2,
     "batchsize": 32,
     "hiddensize" : 64,
-    "nthreats" : 2 ,
+    "nthreads" : 2 ,
     "epochs_mdn": 2,
     "nmix" : 8,
     "logstep":100,
