@@ -12,28 +12,28 @@ import numpy as np
 from torch.utils.data import Dataset
 
 class ColorDatasets(Dataset):
-    def __init__(Self, out_directory,listdir= None,
+    def __init__(self, out_directory,listdir= None,
                   featslistdir = None, shape = (64,64),
                   outshape = (256,256), split = 'train'):
         #Save paths to list
-        Self.img_fns = []
-        Self.feats_fns = []
+        self.img_fns = []
+        self.feats_fns = []
 
         with open("%s/list.%s.vae.txt" % (listdir,split), "r") as ftr:
             for img_fn in ftr:
-                Self.img_fns.append(img_fn.strip("\n"))
+                self.img_fns.append(img_fn.strip("\n"))
         
         with open("%s/list.%s.txt"% (featslistdir,split), "r") as ftr:
             for feats_fn in ftr:
-                Self.feats_fns.append(feats_fn.strip("\n"))
+                self.feats_fns.append(feats_fn.strip("\n"))
 
-        Self.img_num = min(len(Self.img_fns), len(Self.feats_fns))
-        Self.shape = shape
-        Self.outshape = outshape
-        Self.out_directory = out_directory
+        self.img_num = min(len(self.img_fns), len(self.feats_fns))
+        self.shape = shape
+        self.outshape = outshape
+        self.out_directory = out_directory
 
         #Create dictionary to save weight of 313 ab bins
-        Self.lossweights = None
+        self.lossweights = None
         countbins = 1./np.load("data/zhang_weights/prior_probs.npy")
         binedges = np.load("data/zhang_weights/ab_quantize.npy").reshape(2,313)
         lossweights = {}
@@ -41,8 +41,8 @@ class ColorDatasets(Dataset):
             if binedges[0,i] not in lossweights:
                 lossweights[binedges[0,i]] ={}
             lossweights[binedges[0,i]] [binedges[1,i]] = countbins[i]
-        Self.binedges  = binedges
-        Self.lossweights = lossweights
+        self.binedges  = binedges
+        self.lossweights = lossweights
 
     def __len__(self):
         return self.img_num

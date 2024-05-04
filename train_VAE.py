@@ -88,7 +88,7 @@ def train_vae():
     model.cuda()
     model.train()
 
-    optimizer = optim.Adam(model.paramrters(), lr = 5e-5)
+    optimizer = optim.Adam(model.parameters(), lr = 5e-5)
 
     #Train 
     itr_idx = 0
