@@ -111,21 +111,6 @@ class VAE(nn.Module):
         color_out = self.decoder(z, sc_feat32, sc_feat16, sc_feat8, sc_feat4)
         return mu , logvar, color_out
     
-def vae_loss(mu, logvar, pred, gt, lossweights, batchsize):
-    '''
-    Return the loss values of the VAE model
-    '''
-    kl_element = torch.add(torch.add(torch.add(mu.pow(2), logvar.exp()) , -1), logvar.mul(-1))
-    kl_loss = torch.sum(kl_element).mul(0.5)
-    gt = gt.reshape(-1, 64*64*2)
-    pred = pred.reshape(-1, 64*64*2)
-    recon_element = torch.sqrt(torch.sum(torch.mul(torch.add(gt, pred.mul(-1)).pow(2), lossweights), 1))
-    recon_loss = torch.sum(recon_element).mul(1.0/(batchsize))
-
-    recon_element_12 = torch.sqrt(torch.sum(torch.add(gt, pred.mul(-1)).pow(2), 1))
-    recon_loss_12 = torch.sum(recon_element_12).mul(1.0/(batchsize))
-
-    return kl_loss , recon_loss, recon_loss_12
 
 
         

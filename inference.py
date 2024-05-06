@@ -5,11 +5,13 @@ import torch
 from torch.utils.data import DataLoader
 from tqdm import tqdm
 
-from hyperparamaters import  args, get_dirpaths
-from Data_Preparation import ColorDatasets
-from VAE_model import VAE
-from MDN_model import MDN, get_gmm_coeffs
-def inference():
+from config import  args, get_dirpaths
+from dataloader import ColorDatasets
+from VAE import VAE
+from MDN import MDN
+from losses import get_gmm_coeffs
+
+def inference(vae_ckpt=None, mdn_ckpt=None):
     #Load hyperparameters
     out_dir , listdir, featslistdir  = get_dirpaths(args)
     batchsize = args['batchsize']
@@ -94,8 +96,5 @@ def inference():
                 nmix,
                 net_recon_const= batch_recon_const_outres_j[orderid, ...],
             )
-        print("Complete inference")
+        print("\nComplete inference. The results are saved in data/output/lfw/images.")
 
-    vae_ckpt = "model_vae.pth"
-    mdn_ckpt = "model_mdn.pth"
-    inference(vae_ckpt,mdn_ckpt)

@@ -5,10 +5,11 @@ from tqdm import tqdm
 import torch
 import torch.optim as optim
 
-from hyperparamaters import  args, get_dirpaths
-from Data_Preparation import ColorDatasets
-from MDN_model import mdn_loss, MDN, get_gmm_coeffs
-from VAE_model import VAE
+from config import  args, get_dirpaths
+from dataloader import ColorDatasets
+from MDN import  MDN
+from VAE import VAE
+from losses import mdn_loss
 def test_mdn(moddel_vae,model_mdn):
     # Load hyperparameters
     out_dir, listdir, featslistdir = get_dirpaths(args)

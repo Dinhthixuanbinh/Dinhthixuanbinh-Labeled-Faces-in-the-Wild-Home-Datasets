@@ -7,9 +7,10 @@ from tqdm import tqdm
 import torch
 import torch.optim as optim
 
-from hyperparamaters import  args, get_dirpaths
-from Data_Preparation import ColorDatasets
-from VAE_model import vae_loss, VAE
+from config import  args, get_dirpaths
+from dataloader import ColorDatasets
+from VAE import VAE
+from losses import vae_loss
 def test_vae(model):
     model.eval()
 
