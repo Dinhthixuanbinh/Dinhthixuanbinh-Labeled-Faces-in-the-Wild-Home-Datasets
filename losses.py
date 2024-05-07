@@ -41,11 +41,11 @@ stddev ).
     
     '''
     gmm_mu , gmm_pi = get_gmm_coeffs(gmm_params)
-    eps = torch.randn(stddev.sive()).normal_().cuda()
+    eps = torch.randn(stddev.size()).normal_().cuda()
     z = torch.add(mu, torch.mul(eps, stddev))
     z_flat = z.repeat(1, args['nmix'])
     z_flat = z_flat.reshape(batchsize * args['nmix'], args['hiddensize'])
-    gmm_mu_flat = gmm_mu.reshape(atchsize * args['nmix'], args['hiddensize'])
+    gmm_mu_flat = gmm_mu.reshape(batchsize * args['nmix'], args['hiddensize'])
     dist_all = torch.sqrt(torch.sum(torch.add(z_flat, gmm_mu_flat.mul(-1)).pow(2).mul(50), 1))
     dist_all = dist_all.reshape(batchsize, args['nmix'])
     dist_min, selectids = torch.min(dist_all,1)

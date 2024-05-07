@@ -1,21 +1,9 @@
-'''
-model : conditional VAE have 3 modules :\
-    Encoder modules, \
-    Decoder modules,\
-    Conditional VAE Encoder modules.\
-input: C color space (2 x h x w),  G gray image (1 x h x w) using to begin-point 
-    for  Conditional Encoder to  extract features map having gobal information, 
-    increase accurate of Decoder module
-    
-'''
-
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
-from config import args 
-
 class MDN(nn.Module):
+  
     def __init__(self):
         super(MDN, self).__init__()
 
@@ -24,38 +12,43 @@ class MDN(nn.Module):
         self.nmix = 8
         self.nout = (self.hidden_size + 1) * self.nmix
 
+        # Define MDN Layers - (512, 28, 28)
         self.model = nn.Sequential(
-            nn.Conv2d(self.feats_nch,384,5, stride=1, padding=2),
+            nn.Conv2d(self.feats_nch, 384, 5, stride=1, padding=2), # (384, 28, 28)
             nn.BatchNorm2d(384),
             nn.ReLU(),
-            nn.Conv2d(384,320,5,stride=1,padding=2),
+            nn.Conv2d(384, 320, 5, stride=1, padding=2),            # (320, 28, 28)
             nn.BatchNorm2d(320),
             nn.ReLU(),
-            nn.Conv2d(320,288,5,stride=1,padding=2),
+            nn.Conv2d(320, 288, 5, stride=1, padding=2),            # (288, 28, 28)
             nn.BatchNorm2d(288),
             nn.ReLU(),
-            nn.Conv2d(288,256,5,stride=1,padding=2),
+            nn.Conv2d(288, 256, 5, stride=2, padding=2),            # (256, 14, 14)
             nn.BatchNorm2d(256),
             nn.ReLU(),
-            nn.Conv2d(256,128,5,stride=1,padding=2),
+            nn.Conv2d(256, 128, 5, stride=1, padding=2),            # (128, 14, 14)
             nn.BatchNorm2d(128),
             nn.ReLU(),
-            nn.Conv2d(128,96,5,stride=1,padding=2),
+            nn.Conv2d(128, 96, 5, stride=2, padding=2),             # (96, 7, 7)
             nn.BatchNorm2d(96),
             nn.ReLU(),
-            nn.Conv2d(96,64,5,stride=1,padding=2),
+            nn.Conv2d(96, 64, 5, stride=2, padding=2),              # (64, 4, 4)
             nn.BatchNorm2d(64),
             nn.ReLU(),
-            nn.Dropout(0.7)
+            nn.Dropout(p=0.7)
         )
 
         self.fc = nn.Linear(4 * 4 * 64, self.nout)
 
-    def forward(self, feats): 
+    def forward(self, feats):
         x = self.model(feats)
-        x = x.view(-1,4, * 4 * 64)
+        x = x.view(-1, 4 * 4 * 64)
         x = F.relu(x)
-        x = F.dropout(x, p= 0.7, training= self.training)
-
+        x = F.dropout(x, p=0.7, training=self.training)
+        x = self.fc(x)
         return x
-    
+
+if __name__ == "__main__":
+    model = MDN()
+    from torchsummary import summary
+    summary(model, (512, 28, 28))   # (520,)
