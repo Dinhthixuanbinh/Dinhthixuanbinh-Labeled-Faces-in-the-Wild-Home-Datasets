@@ -145,6 +145,6 @@ Loss { test_loss:8.3f}"
         torch.save(model_mdn.state_dict(), "%s/models_mdn/model_mdn.pth" % (out_dir))
 
     print("Complete MDN training")
-train_mdn()
+# train_mdn()
 
     
