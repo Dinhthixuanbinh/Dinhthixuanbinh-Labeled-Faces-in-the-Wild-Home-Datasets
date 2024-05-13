@@ -136,10 +136,7 @@ def train_mdn():
 
         train_loss = (train_loss * 1.0) / (nbatches)
         test_loss = test_mdn(model_vae, model_mdn)
-        print(
-            f"End of epoch { epochs_mdn:3d} | Train Loss { train_loss:8.3f} | Test
-Loss { test_loss:8.3f}"
-        )
+        print(f"End of epoch { epochs_mdn:3d} | Train Loss { train_loss:8.3f} | Test Loss { test_loss:8.3f}")
 
         # Save MDN model 
         torch.save(model_mdn.state_dict(), "%s/models_mdn/model_mdn.pth" % (out_dir))
