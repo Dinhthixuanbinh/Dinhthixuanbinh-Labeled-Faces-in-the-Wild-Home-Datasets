@@ -25,7 +25,7 @@ def test_mdn(moddel_vae,model_mdn):
     nbatches = np.int_(np.floor(data.img_num / batchsize))
     data_loader = DataLoader(
         dataset= data,
-        num_workers= args["nthreats"],
+        num_workers= args["nthreads"],
         batch_size= batchsize,
         shuffle= True,
         drop_last= True,
