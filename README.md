@@ -23,5 +23,3 @@ The input of the Conditional Variational Autoencoder (CVAE) network requires inf
 <img src="./inference.png">
 
 
-```
-
